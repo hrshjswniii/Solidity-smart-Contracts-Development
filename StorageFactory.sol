@@ -7,8 +7,14 @@ contract StorageFactory {
     SimpleStorage[] public listOfSimpleStorageContracts;
 ​
     function createSimpleStorageContract() public {
-         simpleStorage = new SimpleStorage();
-    };
-    function sfStore(uint256 _simpleStorageIndex, uint256 _simpleStorageNumber) public {};
-    function sfGet(uint256 _simpleStorageIndex) public view returns (uint256) {}
+            SimpleStorage simpleStorageContractVariable = new SimpleStorage();
+            listOfSimpleStorageContracts.push(simpleStorageContractVariable);
+    }
+    function sfStore(uint256 _simpleStorageIndex, uint256 _simpleStorageNumber) public {
+        listOfSimpleStorageContracts[_simpleStorageIndex].store( _simpleStorageNumber);
+    }
+
+    function sfGet(uint256 _simpleStorageIndex) public view returns (uint256) {
+        return listOfSimpleStorageContracts[_simpleStorageIndex].retrieve();
+    }
 }
