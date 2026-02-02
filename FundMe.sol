@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
+import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
+
 contract FundMe public payable {
     // send funds into our contract
     // allow users to send $
@@ -12,5 +14,23 @@ contract FundMe public payable {
     // a function revert will undo any actions that have been done.
     // It will send the remaining gas back
     }
-    // owner can withdraw funds
+
+    function deposit() public payable {
+    balances[msg.sender] += msg.value;
+    }
+
+    function transfer(address recipient, uint amount) public {
+    require(balances[msg.sender] >= amount);
+    balances[msg.sender] -= amount;
+    balances[recipient] += amount;
+    }
+
+     // Function to get the price of Ethereum in USD
+     function getPrice() public {}
+     // Function to convert a value based on the price
+     function getConversionRate() public {}
+
+    function getVersion() public view returns (uint256) {
+    return AggregatorV3Interface(0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419).version();
+}
 }
