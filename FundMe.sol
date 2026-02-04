@@ -19,6 +19,17 @@ contract FundMe public payable {
         i_owner = msg.sender;
     }
 
+    modifier onlyOwner() {
+        // require(msg.sender == owner);
+        if (msg.sender != i_owner) revert NotOwner();
+        _;
+    }
+
+    function withdraw() public onlyOwner {
+        for (uint256 funderIndex = 0; funderIndex < funders.length; funderIndex++) {
+            address funder = funders[funderIndex];
+            addressToAmountFunded[funder] = 0;
+        }
     
     
     function fund() public payable {
@@ -40,8 +51,6 @@ contract FundMe public payable {
 
      // Function to get the price of Ethereum in USD
      function getPrice() public {}
-     // Function to convert a value based on the price
-     function getConversionRate() public {}
 
     function getVersion() public view returns (uint256) {
     AggregatorV3Interface priceFeed=AggregatorV3Interface(0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419);
