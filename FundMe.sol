@@ -2,14 +2,27 @@
 pragma solidity ^0.8.18;
 
 import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
+import {PriceConverter} from "./PriceConverter.sol";
+
+error NotOwner();
 
 contract FundMe public payable {
-    // send funds into our contract
-    // allow users to send $
-    // have a minimum of $ sent
-    uint256 public myValue = 1;
+
+    using PriceConvertor for uint256 ;
+    mapping(address => uint256) public addressToAmountFunded;
+    address[] public funders;
+
+    address public /* immutable */ i_owner;
+    uint256 public constant MINIMUM_USD = 5 * 10 ** 18;
+
+    constructor() {
+        i_owner = msg.sender;
+    }
+
+    
+    
     function fund() public {
-      myValue = myValue + 2;
+    myValue = myValue + 2;
     require(msg.value > 1e18, "didn't send enough ETH");
     // a function revert will undo any actions that have been done.
     // It will send the remaining gas back
