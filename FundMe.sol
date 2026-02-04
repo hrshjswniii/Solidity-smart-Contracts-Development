@@ -21,11 +21,11 @@ contract FundMe public payable {
 
     
     
-    function fund() public {
-    myValue = myValue + 2;
-    require(msg.value > 1e18, "didn't send enough ETH");
-    // a function revert will undo any actions that have been done.
-    // It will send the remaining gas back
+    function fund() public payable {
+    require(msg.value.getConversionRate() >= MINIMUM_USD, "You need to spend more ETH!");
+    // require(PriceConverter.getConversionRate(msg.value) >= MINIMUM_USD, "You need to spend more ETH!");
+    addressToAmountFunded[msg.sender] += msg.value;
+    funders.push(msg.sender);
     }
 
     function deposit() public payable {
@@ -44,6 +44,7 @@ contract FundMe public payable {
      function getConversionRate() public {}
 
     function getVersion() public view returns (uint256) {
-    return AggregatorV3Interface(0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419).version();
+    AggregatorV3Interface priceFeed=AggregatorV3Interface(0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419);
+    return priceFeed.version();
 }
 }
