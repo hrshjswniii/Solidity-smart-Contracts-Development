@@ -30,6 +30,7 @@ contract FundMe public payable {
             address funder = funders[funderIndex];
             addressToAmountFunded[funder] = 0;
         }
+    funders = new address[](0);
     
     
     function fund() public payable {
@@ -56,4 +57,12 @@ contract FundMe public payable {
     AggregatorV3Interface priceFeed=AggregatorV3Interface(0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419);
     return priceFeed.version();
 }
+
+         // transfer
+         payable(msg.sender).transfer(address(this).balance);
+
+        // send
+        bool sendSuccess = payable(msg.sender).send(address(this).balance);
+        require(sendSuccess, "Send failed");
+
 }
